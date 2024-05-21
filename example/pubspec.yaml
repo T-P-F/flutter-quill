@@ -1,10 +1,10 @@
 name: example
 description: A demo for the Flutter Quill
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.5 <4.0.0'
+  sdk: ">=3.1.5 <4.0.0"
 dependencies:
   flutter:
     sdk: flutter
@@ -13,11 +13,11 @@ dependencies:
   cupertino_icons: ^1.0.6
 
   # Flutter Quill Packages
-  flutter_quill: ^9.1.0
-  flutter_quill_extensions: ^9.1.0
-  flutter_quill_test: ^9.1.0
-  quill_html_converter: ^0.0.1-experimental.1
-  quill_pdf_converter: ^9.1.0
+  flutter_quill: ^9.3.18
+  flutter_quill_extensions: ^9.3.18
+  flutter_quill_test: ^9.3.18
+  quill_html_converter: ^9.3.18
+  quill_pdf_converter: ^9.3.18
 
   # Normal Packages
   path: ^1.8.3
@@ -38,14 +38,14 @@ dependencies:
   json_annotation: ^4.8.1
 
   # Plugins
-  image_cropper: ^5.0.1
+  image_cropper: ^6.0.0
   path_provider: ^2.1.1
   # For drag and drop feature
   desktop_drop: ^0.4.4
   # For picking quill document files
-  file_picker: ^6.1.1
+  file_picker: ^8.0.3
   # For sharing text
-  share_plus: ^7.2.1
+  share_plus: ^9.0.0
   printing: ^5.11.1
   google_fonts: ^6.1.0
 
@@ -61,11 +61,10 @@ dependency_overrides:
   quill_pdf_converter:
     path: ../quill_pdf_converter
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
   build_runner: ^2.4.6
   flutter_gen_runner: ^5.3.2
 
@@ -78,7 +77,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
-  
+
   fonts:
     - family: monospace
       fonts:
@@ -91,7 +90,7 @@ flutter:
         - asset: assets/fonts/SansSerif.ttf
     - family: ibarra-real-nova
       fonts:
-          - asset: assets/fonts/IbarraRealNova-Regular.ttf
+        - asset: assets/fonts/IbarraRealNova-Regular.ttf
     - family: square-peg
       fonts:
         - asset: assets/fonts/SquarePeg-Regular.ttf

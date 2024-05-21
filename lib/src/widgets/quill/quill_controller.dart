@@ -146,9 +146,7 @@ class QuillController extends ChangeNotifier {
   /// Only attributes applied to all characters within this range are
   /// included in the result.
   Style getSelectionStyle() {
-    return document
-        .collectStyle(selection.start, selection.end - selection.start)
-        .mergeAll(toggledStyle);
+    return document.collectStyle(selection.start, selection.end - selection.start).mergeAll(toggledStyle);
   }
 
   // Increases or decreases the indent of the current selection by 1.
@@ -217,22 +215,20 @@ class QuillController extends ChangeNotifier {
 
   /// Returns all styles and Embed for each node within selection
   List<OffsetValue> getAllIndividualSelectionStylesAndEmbed() {
-    final stylesAndEmbed = document.collectAllIndividualStyleAndEmbed(
-        selection.start, selection.end - selection.start);
+    final stylesAndEmbed =
+        document.collectAllIndividualStyleAndEmbed(selection.start, selection.end - selection.start);
     return stylesAndEmbed;
   }
 
   /// Returns plain text for each node within selection
   String getPlainText() {
-    final text =
-        document.getPlainText(selection.start, selection.end - selection.start);
+    final text = document.getPlainText(selection.start, selection.end - selection.start);
     return text;
   }
 
   /// Returns all styles for any character within the specified text range.
   List<Style> getAllSelectionStyles() {
-    final styles = document.collectAllStyles(
-        selection.start, selection.end - selection.start)
+    final styles = document.collectAllStyles(selection.start, selection.end - selection.start)
       ..add(toggledStyle);
     return styles;
   }
@@ -246,13 +242,8 @@ class QuillController extends ChangeNotifier {
 
   void _handleHistoryChange(int? len) {
     if (len! != 0) {
-      // if (this.selection.extentOffset >= document.length) {
-      // // cursor exceeds the length of document, position it in the end
-      // updateSelection(
-      // TextSelection.collapsed(offset: document.length), ChangeSource.LOCAL);
-      updateSelection(
-          TextSelection.collapsed(offset: selection.baseOffset + len),
-          ChangeSource.local);
+      final int targetOffset = math.max(selection.baseOffset + len, 0);
+      updateSelection(TextSelection.collapsed(offset: targetOffset), ChangeSource.local);
     } else {
       // no need to move cursor
       notifyListeners();
@@ -272,8 +263,7 @@ class QuillController extends ChangeNotifier {
 
   /// clear editor
   void clear() {
-    replaceText(0, plainTextEditingValue.text.length - 1, '',
-        const TextSelection.collapsed(offset: 0));
+    replaceText(0, plainTextEditingValue.text.length - 1, '', const TextSelection.collapsed(offset: 0));
   }
 
   void replaceText(
@@ -293,17 +283,11 @@ class QuillController extends ChangeNotifier {
     Delta? delta;
     if (len > 0 || data is! String || data.isNotEmpty) {
       delta = document.replace(index, len, data);
-      var shouldRetainDelta = toggledStyle.isNotEmpty &&
-          delta.isNotEmpty &&
-          delta.length <= 2 &&
-          delta.last.isInsert;
-      if (shouldRetainDelta &&
-          toggledStyle.isNotEmpty &&
-          delta.length == 2 &&
-          delta.last.data == '\n') {
+      var shouldRetainDelta =
+          toggledStyle.isNotEmpty && delta.isNotEmpty && delta.length <= 2 && delta.last.isInsert;
+      if (shouldRetainDelta && toggledStyle.isNotEmpty && delta.length == 2 && delta.last.data == '\n') {
         // if all attributes are inline, shouldRetainDelta should be false
-        final anyAttributeNotInline =
-            toggledStyle.values.any((attr) => !attr.isInline);
+        final anyAttributeNotInline = toggledStyle.values.any((attr) => !attr.isInline);
         if (!anyAttributeNotInline) {
           shouldRetainDelta = false;
         }
@@ -349,8 +333,7 @@ class QuillController extends ChangeNotifier {
   /// forward == true && textAfter.isEmpty
   /// Android only
   /// see https://github.com/singerdmx/flutter-quill/discussions/514
-  void handleDelete(int cursorPosition, bool forward) =>
-      onDelete?.call(cursorPosition, forward);
+  void handleDelete(int cursorPosition, bool forward) => onDelete?.call(cursorPosition, forward);
 
   void formatTextStyle(int index, int len, Style style) {
     style.attributes.forEach((key, attr) {
@@ -364,9 +347,7 @@ class QuillController extends ChangeNotifier {
     Attribute? attribute, {
     bool shouldNotifyListeners = true,
   }) {
-    if (len == 0 &&
-        attribute!.isInline &&
-        attribute.key != Attribute.link.key) {
+    if (len == 0 && attribute!.isInline && attribute.key != Attribute.link.key) {
       // Add the attribute to our toggledStyle.
       // It will be used later upon insertion.
       toggledStyle = toggledStyle.put(attribute);
@@ -387,8 +368,7 @@ class QuillController extends ChangeNotifier {
     }
   }
 
-  void formatSelection(Attribute? attribute,
-      {bool shouldNotifyListeners = true}) {
+  void formatSelection(Attribute? attribute, {bool shouldNotifyListeners = true}) {
     formatText(
       selection.start,
       selection.end - selection.start,
@@ -474,8 +454,7 @@ class QuillController extends ChangeNotifier {
     _selection = textSelection;
     final end = document.length - 1;
     _selection = selection.copyWith(
-        baseOffset: math.min(selection.baseOffset, end),
-        extentOffset: math.min(selection.extentOffset, end));
+        baseOffset: math.min(selection.baseOffset, end), extentOffset: math.min(selection.extentOffset, end));
     if (keepStyleOnNewLine) {
       final style = getSelectionStyle();
       final ignoredStyles = style.attributes.values.where(
